@@ -1,6 +1,6 @@
-#include "stdafx.h"
+#include "../Precompiled/stdafx.h"
 #include "IOCPContext.h"
-#include "ClientSession.h"
+#include "../Client/ClientSession.h"
 #include "IOCPManager.h"
 
 IOCPManager * const IOCPManager::Instance()
@@ -76,7 +76,7 @@ bool IOCPManager::Release()
 
 bool IOCPManager::StartThread()
 {
-	for (int i = 0; i < thread::hardware_concurrency(); ++i)
+	for (UINT i = 0; i < thread::hardware_concurrency(); ++i)
 	{
 		m_WorkerThread.push_back(thread{ [this]() { WorkerThreadFunc(); } });
 	}

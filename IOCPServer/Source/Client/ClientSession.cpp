@@ -1,5 +1,5 @@
-#include "stdafx.h"
-#include "IOCPContext.h"
+#include "../Precompiled/stdafx.h"
+#include "../IOCP/IOCPContext.h"
 #include "ClientSession.h"
 
 

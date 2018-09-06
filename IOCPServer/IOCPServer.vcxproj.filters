@@ -13,51 +13,51 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Conf.">
-      <UniqueIdentifier>{a311785f-3b77-476e-930e-d6f42f04d9b3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="IOCPManager">
-      <UniqueIdentifier>{ce22f802-f108-4501-a0e4-746e7b92fa39}</UniqueIdentifier>
+    <Filter Include="IOCP">
+      <UniqueIdentifier>{a4e1b0cd-8bb8-4f60-a84d-4cddae04e4c7}</UniqueIdentifier>
     </Filter>
     <Filter Include="ClientSession">
-      <UniqueIdentifier>{4aea45c9-5660-4ee5-8f9c-7ab7cfc59364}</UniqueIdentifier>
+      <UniqueIdentifier>{e9ae24f5-4f03-44b3-821e-08d623a633d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Precompiled">
+      <UniqueIdentifier>{105ad4af-1a5a-4a83-8b30-890d2710320f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="IOCPManager.h">
-      <Filter>IOCPManager</Filter>
-    </ClInclude>
-    <ClInclude Include="IOCPContext.h">
-      <Filter>IOCPManager</Filter>
-    </ClInclude>
-    <ClInclude Include="ClientSession.h">
+    <ClCompile Include="Source\main.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\IOCP\IOCPManager.cpp">
+      <Filter>IOCP</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Client\ClientSession.cpp">
       <Filter>ClientSession</Filter>
-    </ClInclude>
-    <ClInclude Include="SessionManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
+    </ClCompile>
+    <ClCompile Include="Source\Client\SessionManager.cpp">
+      <Filter>ClientSession</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Precompiled\stdafx.cpp">
+      <Filter>Precompiled</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="IOCPManager.cpp">
-      <Filter>IOCPManager</Filter>
-    </ClCompile>
-    <ClCompile Include="ClientSession.cpp">
+    <ClInclude Include="Source\IOCP\IOCPContext.h">
+      <Filter>IOCP</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\IOCP\IOCPManager.h">
+      <Filter>IOCP</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Client\ClientSession.h">
       <Filter>ClientSession</Filter>
-    </ClCompile>
-    <ClCompile Include="SessionManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
+    </ClInclude>
+    <ClInclude Include="Source\Client\SessionManager.h">
+      <Filter>ClientSession</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Precompiled\stdafx.h">
+      <Filter>Precompiled</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Precompiled\targetver.h">
+      <Filter>Precompiled</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

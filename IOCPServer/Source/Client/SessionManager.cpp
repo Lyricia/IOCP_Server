@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "../Precompiled/stdafx.h"
 #include "SessionManager.h"
 
 
