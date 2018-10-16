@@ -108,6 +108,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -116,14 +117,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Client\ClientSession.cpp" />
-    <ClCompile Include="Source\Client\SessionManager.cpp" />
     <ClCompile Include="Source\IOCP\IOCPManager.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Precompiled\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Client\ClientSession.h" />
-    <ClInclude Include="Source\Client\SessionManager.h" />
     <ClInclude Include="Source\IOCP\IOCPContext.h" />
     <ClInclude Include="Source\IOCP\IOCPManager.h" />
     <ClInclude Include="Source\Precompiled\stdafx.h" />

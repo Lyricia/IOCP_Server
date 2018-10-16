@@ -14,7 +14,7 @@ private:
 	vector<thread>			m_WorkerThread;
 	thread					m_TimerThread;
 
-	vector<ClientSession>	m_ClientList;
+	unordered_map<UINT, ClientSession*>		m_ClientList;
 
 public:
 	static IOCPManager* const Instance();

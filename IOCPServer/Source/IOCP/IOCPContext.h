@@ -4,19 +4,26 @@
 
 constexpr unsigned int MAX_BUFF_SIZE = 256;
 
-enum enumOperation {
-	op_Send,
-	op_Recv,
-	op_UpdateScene,
-	op_UpdateSend,
-	op_Regen,
-	op_TerminateRoom
-};
+#define oExType OverlappedEx::OperationType
+
+class ClientSession;
 
 class OverlappedEx {
+public:
+	enum class OperationType {
+		op_None,
+		op_Send,
+		op_Recv,
+		op_UpdateScene,
+		op_UpdateSend,
+		op_Regen,
+		op_TerminateRoom
+	};
+
 public:
 	WSAOVERLAPPED	wsaOver;
 	WSABUF			wsabuf;
 	char			io_buf[MAX_BUFF_SIZE];
-	enumOperation	op;
+	OperationType	opType = OperationType::op_None;
+	ClientSession*	Owner = nullptr;
 };

@@ -67,10 +67,15 @@ bool IOCPManager::Release()
 	for (auto& t : m_WorkerThread) { t.join(); }
 	m_TimerThread.join();
 
+	for (auto& c : m_ClientList) {
+		delete c.second;
+	}
+
 	closesocket(m_ListenSock);
 	cout << "close ListenSock" << endl;
 	WSACleanup();
 	cout << "WSACleanup" << endl;
+
 	return true;
 }
 
@@ -120,25 +125,16 @@ bool IOCPManager::StartListen()
 			return false;
 		}
 
-//		CreateIoCompletionPort(
-//			reinterpret_cast<HANDLE*>(newclient->sock),
-//			m_hIOCP,
-//			newclient->IOCPKey,
-//			0
-//		);
+		auto newclient = new ClientSession(++clientCounter);
 
-		unsigned long flag = 0;
+		CreateIoCompletionPort(
+			reinterpret_cast<HANDLE*>(newclient->GetSocket()),
+			m_hIOCP,
+			newclient->GetIOCPKey(),
+			0
+		);
 
-//		WSARecv(
-//			newclient->sock,
-//			&newclient->OverlappedEx.wsabuf,
-//			1,
-//			NULL,
-//			&flag,
-//			&newclient->OverlappedEx.wsaOver,
-//			NULL
-//		);
-
+		newclient->StartRecv();
 	}
 	
 	return true;
@@ -148,26 +144,26 @@ void IOCPManager::WorkerThreadFunc()
 {
 	while (true)
 	{
-		unsigned long datasize;
-		unsigned long long key;
+		ULONG datasize;
+		ULONGLONG key;
 		WSAOVERLAPPED* pOverlapped;
 
 		BOOL isSuccess = GetQueuedCompletionStatus(m_hIOCP, &datasize, &key, &pOverlapped, INFINITE);
-		OverlappedEx* o = reinterpret_cast<OverlappedEx*>(pOverlapped);
+		OverlappedEx* oEx = reinterpret_cast<OverlappedEx*>(pOverlapped);
 		
 		if (0 == isSuccess)
 		{
 			// disconnect
 			continue;
 		}
-		else if (0 == datasize && (o->op == op_Send || o->op == op_Recv))
+		else if (0 == datasize && (oEx->opType == oExType::op_Send || oEx->opType == oExType::op_Recv))
 		{
 			// Disconnect
 			continue;
 		}
 
 		// Send, Recv
-		if (o->op == op_Recv)
+		if (oEx->opType == oExType::op_Recv)
 		{
 			// Need Buffer manager
 

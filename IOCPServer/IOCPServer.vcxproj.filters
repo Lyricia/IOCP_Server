@@ -33,9 +33,6 @@
     <ClCompile Include="Source\Client\ClientSession.cpp">
       <Filter>ClientSession</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Client\SessionManager.cpp">
-      <Filter>ClientSession</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Precompiled\stdafx.cpp">
       <Filter>Precompiled</Filter>
     </ClCompile>
@@ -48,9 +45,6 @@
       <Filter>IOCP</Filter>
     </ClInclude>
     <ClInclude Include="Source\Client\ClientSession.h">
-      <Filter>ClientSession</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Client\SessionManager.h">
       <Filter>ClientSession</Filter>
     </ClInclude>
     <ClInclude Include="Source\Precompiled\stdafx.h">
