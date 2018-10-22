@@ -2,3 +2,6 @@
 *.tlog
 *.lastbuildstate
 *.xml
+.vs/
+IOCPServer/Debug/
+IOCPServer/x64/
