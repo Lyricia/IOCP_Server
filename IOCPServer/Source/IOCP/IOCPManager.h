@@ -2,13 +2,14 @@
 
 class ClientSession;
 
+constexpr USHORT SERVERPORT = 9000;
+
 class IOCPManager
 {
 private:
 	WSADATA					m_WSA;
 	SOCKET					m_ListenSock;
 	SOCKADDR_IN				m_ServerAddr;
-	u_short					m_ServerPort = 9000;
 	HANDLE					m_hIOCP;
 
 	vector<thread>			m_WorkerThread;

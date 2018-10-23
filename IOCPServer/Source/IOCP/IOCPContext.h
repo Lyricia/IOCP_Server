@@ -2,8 +2,6 @@
 #pragma comment(lib, "ws2_32")
 #include <WinSock2.h>
 
-constexpr unsigned int MAX_BUFF_SIZE = 256;
-
 #define oExType OverlappedEx::OperationType
 
 class ClientSession;

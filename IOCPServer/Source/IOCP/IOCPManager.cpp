@@ -50,7 +50,7 @@ bool IOCPManager::Initialize()
 	ZeroMemory(&m_ServerAddr, sizeof(m_ServerAddr));
 	m_ServerAddr.sin_family = AF_INET;
 	m_ServerAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	m_ServerAddr.sin_port = htons(m_ServerPort);
+	m_ServerAddr.sin_port = htons(SERVERPORT);
 	retval = ::bind(m_ListenSock, (SOCKADDR *)&m_ServerAddr, sizeof(m_ServerAddr));
 	if (retval == SOCKET_ERROR)
 	{
@@ -95,7 +95,8 @@ bool IOCPManager::StartThread()
 
 bool IOCPManager::StartListen()
 {
-	int retval{ 0 };
+	int retval = 0;
+	UINT clientCounter = 0;
 
 	retval = listen(m_ListenSock, SOMAXCONN);
 	if (retval == SOCKET_ERROR)
@@ -103,18 +104,17 @@ bool IOCPManager::StartListen()
 		cout << "Listening Failed" << endl;
 		return false;
 	}
-	cout << "Start Server Listening" << endl;
+	cout << "Start Server Listening\n" << endl;
 
 	while (true)
 	{
 		SOCKET client_sock;
 		SOCKADDR_IN clientaddr;
 		int addrlen;
-		UINT clientCounter = 0;
 
 		ZeroMemory(&clientaddr, sizeof(SOCKADDR_IN));
 		clientaddr.sin_family = AF_INET;
-		clientaddr.sin_port = htons(m_ServerPort);
+		clientaddr.sin_port = htons(SERVERPORT);
 		clientaddr.sin_addr.s_addr = INADDR_ANY;
 		addrlen = sizeof(clientaddr);
 
@@ -125,7 +125,8 @@ bool IOCPManager::StartListen()
 			return false;
 		}
 
-		auto newclient = new ClientSession(++clientCounter);
+		ClientSession* newclient = new ClientSession(client_sock, ++clientCounter);
+		m_ClientList[(int)newclient->GetIOCPKey()] = newclient;
 
 		CreateIoCompletionPort(
 			reinterpret_cast<HANDLE*>(newclient->GetSocket()),
@@ -135,6 +136,7 @@ bool IOCPManager::StartListen()
 		);
 
 		newclient->StartRecv();
+		cout << "New Client " << newclient->GetIOCPKey() << " entered\n";
 	}
 	
 	return true;
@@ -144,64 +146,33 @@ void IOCPManager::WorkerThreadFunc()
 {
 	while (true)
 	{
-		ULONG datasize;
+		ULONG Received_size;
 		ULONGLONG key;
 		WSAOVERLAPPED* pOverlapped;
 
-		BOOL isSuccess = GetQueuedCompletionStatus(m_hIOCP, &datasize, &key, &pOverlapped, INFINITE);
+		BOOL isSuccess = GetQueuedCompletionStatus(m_hIOCP, &Received_size, &key, &pOverlapped, INFINITE);
 		OverlappedEx* oEx = reinterpret_cast<OverlappedEx*>(pOverlapped);
 		
 		if (0 == isSuccess)
 		{
 			// disconnect
+			cout << "Client " << key << " disconnected\n";
 			continue;
 		}
-		else if (0 == datasize && (oEx->opType == oExType::op_Send || oEx->opType == oExType::op_Recv))
+		else if (0 == Received_size && (oEx->opType == oExType::op_Send || oEx->opType == oExType::op_Recv))
 		{
 			// Disconnect
+			cout << "Client " << key << " disconnected\n";
 			continue;
 		}
 
 		// Send, Recv
 		if (oEx->opType == oExType::op_Recv)
 		{
-			// Need Buffer manager
+			auto client = reinterpret_cast<ClientSession*>(oEx->Owner);
 
-			//ClientInfo* client = server->m_ClientFinder[key];
-			//int Received_size = datasize;
-			//char* ptr = o->io_buf;
-			//
-			//while (0 < Received_size)
-			//{
-			//	if (client->packetsize == 0)
-			//		client->packetsize = ptr[0];
-			//
-			//	int remainsize = client->packetsize - client->prev_packetsize;
-			//
-			//	if (remainsize <= Received_size) {
-			//		memcpy(client->prev_packet + client->prev_packetsize, ptr, remainsize);
-			//
-			//		MSGWRAPPER msg = new char[client->packetsize];
-			//		memcpy(msg, client->prev_packet, client->packetsize);
-			//		server->ProcessMSG(key, msg);
-			//		delete msg;
-			//
-			//		Received_size -= remainsize;
-			//		ptr += remainsize;
-			//		client->packetsize = 0;
-			//		client->prev_packetsize = 0;
-			//
-			//		//if (remainsize == 0) break;
-			//	}
-			//	else {
-			//		memcpy(client->prev_packet + client->prev_packetsize, ptr, Received_size);
-			//		client->prev_packetsize += Received_size;
-			//	}
-			//
-			//}
-			//unsigned long rFlag = 0;
-			//ZeroMemory(&o->wsaOver, sizeof(OVERLAPPED));
-			//WSARecv(client->sock, &o->wsabuf, 1, NULL, &rFlag, &o->wsaOver, NULL);
+			if (client != nullptr)
+				client->ProcessRecv(Received_size);
 		}
 	}
 }

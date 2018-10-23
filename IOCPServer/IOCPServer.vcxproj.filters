@@ -53,5 +53,11 @@
     <ClInclude Include="Source\Precompiled\targetver.h">
       <Filter>Precompiled</Filter>
     </ClInclude>
+    <ClInclude Include="Source\IOCP\Protocol.h">
+      <Filter>IOCP</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Todo.txt" />
   </ItemGroup>
 </Project>
